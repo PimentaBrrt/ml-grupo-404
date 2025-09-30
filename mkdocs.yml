@@ -1,8 +1,8 @@
-site_name: Template de Entrega
-site_author: Sandmann, H.
-site_url: https://hsandmann.github.io/documentation.template
-repo_url: https://github.com/hsandmann/documentation.template
-repo_name: github/documentation.template
+site_name: ML-404
+site_author: Guilherme Orlandi, Luis Felipe Degaspari, Luiz Felipe Pimenta, Luiz Fernando Costa
+site_url: https://pimentabrrt.github.io/ml-grupo-404
+repo_url: https://github.com/PimentaBrrt/ml-grupo-404
+repo_name: pimentabrrt/ml-grupo-404
 
 theme:
   name: material
@@ -141,11 +141,6 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - This documentation: ./thisdocumentation/index.md
-  - Roteiros:
-    - Roteiro 1: ./roteiro1/index.md
-    - Roteiro 2: ./roteiro2/index.md
-    - Roteiro 3: ./roteiro3/index.md
-    - Roteiro 4: ./roteiro4/index.md
-    - Notebook 1: ./notebook1/ex1_data.ipynb
-  - Projeto: ./projeto/index.md
+  - Projetos:
+    - Projeto 1: ./projeto/index.md
+    
