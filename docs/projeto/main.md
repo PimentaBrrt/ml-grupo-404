@@ -45,19 +45,19 @@ As informações obtidas foram as seguintes:
 
 | Coluna | Tipo | Descrição |
 |--------|------|-----------|
-| Alcohol | Float | Teor alcoólico do vinho |
-| Malic_Acid | Float | Ácido málico |
-| Ash | Float | Cinzas |
-| Ash_Alcanity | Float | Alcalinidade das cinzas |
-| Magnesium | Inteiro | Magnésio |
-| Total_Phenols | Float | Total de fenóis |
-| Flavanoids | Float | Flavanóides |
-| Nonflavanoid_Phenols | Float | Fenóis não-flavanóides |
-| Proanthocyanins | Float | Proantocianidinas |
-| Color_Intensity | Float | Intensidade da cor do vinho |
-| Hue | Float | Saturação do vinho |
-| OD280 | Float | Relação OD280/OD315 de vinhos diluídos  |
-| Proline | Inteiro | Prolina |
+| `Alcohol` | Float | Teor alcoólico do vinho |
+| `Malic_Acid` | Float | Ácido málico |
+| `Ash` | Float | Cinzas |
+| `Ash_Alcanity` | Float | Alcalinidade das cinzas |
+| `Magnesium` | Inteiro | Magnésio |
+| `Total_Phenols` | Float | Total de fenóis |
+| `Flavanoids` | Float | Flavanóides |
+| `Nonflavanoid_Phenols` | Float | Fenóis não-flavanóides |
+| `Proanthocyanins` | Float | Proantocianidinas |
+| `Color_Intensity` | Float | Intensidade da cor do vinho |
+| `Hue` | Float | Saturação do vinho |
+| `OD280` | Float | Relação OD280/OD315 de vinhos diluídos  |
+| `Proline` | Inteiro | Prolina |
 
 #### Visualização das variáveis
 
@@ -406,11 +406,69 @@ Esta divisão adequada é de extrema importância, pois ajuda a evitar *overfitt
 
 ### Etapa 6 - Treinamento do modelo Decision Tree
 
+Agora, vamos treinar um modelo de árvore de decisões (Decision Tree) para prever a variável alvo `Wine_Type` para os dados do conjunto *teste*. Nosso objetivo aqui é treinar e avaliar o modelo, para depois compará-lo ao KNN e decidir o melhor para este caso.
 
+=== "Decision Tree"
+    
+    <figure markdown="span">
+        ![Decision-Tree](../images/d-tree.svg)
+    </figure>
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto/decision-tree/training.py"
+    ```
 
 ### Etapa 7 - Avaliação do modelo Decision Tree
 
+Agora, vamos realizar a avaliação do modelo treinado. Primeiramente, vamos ver a acurácia do modelo e a importância de cada uma das features utilizadas para a predição.
 
+=== "Saída"
+
+    ```python exec="1" html="1"
+    --8<-- "docs/projeto/decision-tree/aval-decision.py"
+    ```
+
+=== "Código"
+
+    ```python exec="0"
+    --8<-- "docs/projeto/decision-tree/aval-decision.py"
+    ```
+
+#### Acurácia
+
+O modelo atingiu uma boa acurácia, de **88,89%**, bem próximo do ideal de **95%**. Isso significa que, em 88,89% das previsões feitas, o tipo de vinho predito está correto.
+
+#### Importância das features
+
+- Na tabela de importância das features, podemos notar que a variável mais importante para a previsão é a `Proline`, com **42,74%** de importância na previsão. 
+
+- Diversas variáveis tiveram uma importância nula, sendo elas: `Magnesium`, `Ash`, `Ash_Alcanity`, `Proanthocyanins`, `Nonflavanoid_Phenols`, `Total_Phenols` e `Hue`
+
+- As variáveis `Malic_Acid` e `Alcohol` tiveram uma importância quase irrelevante na predição, de **1,82%** e **0,49%** respectivamente.
+
+#### Matriz de Confusão
+
+Agora, vamos visualizar a matriz de confusão do modelo.
+
+=== "Saída"
+
+    Matriz de confusão
+
+    ![CM-Decision-Tree](../images/cm-d-tree.svg)
+
+    Métricas de qualidade
+
+    ``` python exec="1"
+    --8<-- "docs/projeto/decision-tree/cm-decision.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto/decision-tree/cm-decision.py"
+    ```
 
 ### Etapa 8 - Treinamento do Modelo KNN
 

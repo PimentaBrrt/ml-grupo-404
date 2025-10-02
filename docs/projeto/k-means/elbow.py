@@ -28,5 +28,5 @@ plt.xticks(k_range)
 plt.axvline(x=3, color="red", linestyle="--", alpha=0.7, label="Possível cotovelo K=3")
 
 plt.legend()
-plt.savefig("docs/projeto/images/elbow.svg", format="svg", transparent=True)
+# plt.savefig("docs/projeto/images/elbow.svg", format="svg", transparent=True)
 plt.close()

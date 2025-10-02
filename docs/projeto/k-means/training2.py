@@ -31,5 +31,5 @@ plt.title(f"Clusters de Vinhos - t-SNE + K-means (K=3)\nSilhouette: {silhouette_
 plt.legend()
 plt.colorbar(scatter, label="Cluster")
 
-plt.savefig("docs/projeto/images/k-means-tsne.svg", format="svg", transparent=True)
+# plt.savefig("docs/projeto/images/k-means-tsne.svg", format="svg", transparent=True)
 plt.close()

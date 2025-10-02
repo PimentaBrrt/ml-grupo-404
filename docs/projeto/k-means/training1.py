@@ -30,5 +30,5 @@ plt.title("Clusters de Vinhos - K-means (K=3)")
 plt.legend()
 plt.colorbar(scatter, label="Cluster")
 
-plt.savefig("docs/projeto/images/k-means.svg", format="svg", transparent=True)
+# plt.savefig("docs/projeto/images/k-means.svg", format="svg", transparent=True)
 plt.close()
