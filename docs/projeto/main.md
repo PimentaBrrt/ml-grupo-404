@@ -496,12 +496,81 @@ Isso significa que 15% dos vinhos tipo 3 estão sendo classificados erroneamente
 
 ### Etapa 8 - Treinamento do Modelo KNN
 
+Agora, vamos treinar um modelo de KNN para prever a variável alvo `Wine_Type` para os dados do conjunto teste. Nosso objetivo aqui é treinar e avaliar o modelo, para depois compará-lo ao modelo de árvore de decisões e apontar o modelo superior para este caso.
 
+=== "KNN"
+    
+    <figure markdown="span">
+        ![KNN](../images/knn.svg)
+        <figcaption>Acurácia: 0.9722 </figcaption>
+    </figure>
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto/knn/training.py"
+    ```
 
 ### Etapa 9 - Avaliação do modelo KNN
 
+Agora, vamos realizar a avaliação do modelo KNN.
 
+#### Acurácia
+
+O modelo alcançou uma acurácia de **97,22%**, que é excelente, contudo indica possível *overfitting* no modelo. Para testar essa hipótese, vamos fazer um teste de acurácia nos conjuntos de treino e teste separadamente com KNN e uma validação cruzada.
+
+#### Acurácias dos conjuntos e validação cruzada
+
+=== "Testes overfitting"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto/knn/test-over.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto/knn/test-over.py"
+    ```
+
+Com esses resultados, podemos concluir que há muita chance desse *não ser um caso de overfitting*. Isso porque as acurácias dos conjuntos são **consistentes**, variando apenas em 0,04%. Além disso, a validação cruzada nos demonstrou uma alta média, de 95,52%, um desvio padrão baixo (aproximadamente 3,78%) e uma variação dos scores entre 88,9% à 100%, uma variação normal.
+
+#### Matriz de Confusão
+
+=== "Matriz de Confusão"
+
+    Matriz de confusão
+
+    ![CM-KNN](../images/cm-knn.svg)
+
+    Métricas de qualidade
+
+    ``` python exec="1"
+    --8<-- "docs/projeto/knn/cm.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto/knn/cm.py"
+    ```
+
+O modelo atingiu uma performance excepcional, com acurácia geral de **97%**, classe 1 perfeitamente prevista pelo modelo com Precisão, Recall e F1-Score de 1.00 e alta consistência geral, já que todas classes possuem F1-Score acima de 0.96.
 
 ### Etapa 10 - Relatório Final
 
+Após extensa análise comparativa dos modelos desenvolvidos para a classificação de vinhos, o algoritmo **K-Nearest Neighbors (KNN)** emergiu como a escolha ideal para este problema preditivo, demonstrando performance excepcionalmente superior em todas as métricas de avaliação. 
 
+A estratégia de clusterização com K-Means utilizando visualização **t-SNE** provou-se notavelmente superior à abordagem com PCA, oferecendo:
+
+- Separação mais nítida entre os clusters de vinhos
+
+- Preservação superior das estruturas locais dos dados
+
+- Visualização mais intuitiva das relações entre as variedades
+
+- Agrupamentos mais coesos e semanticamente significativos
+
+O t-SNE demonstrou boa capacidade em revelar a estrutura subjacente do dataset, permitindo identificar grupos naturais de vinhos que se alinham perfeitamente com suas características intrínsecas e qualidade.
+
+Embora o K-Means com t-SNE tenha demonstrado resultados promissores, o *Silhouette Score* de **0.5928** indica espaço para otimização, sugerindo que a separação entre clusters pode ser aprimorada através de outras técnicas como DBSCAN, além do refinamento do pré-processamento dos dados e experimentação com diferentes reduções de dimensionalidade.
