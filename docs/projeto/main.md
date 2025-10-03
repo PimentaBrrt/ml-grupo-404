@@ -470,6 +470,30 @@ Agora, vamos visualizar a matriz de confusão do modelo.
     --8<-- "docs/projeto/decision-tree/cm-decision.py"
     ```
 
+#### Avaliação das métricas
+
+**Pontos Positivos**
+
+- Boa acurácia geral: 89% - modelo consegue classificar corretamente a maioria das instâncias
+
+- Excelente precisão para Wine Type 3: 100% - quando o modelo classifica como tipo 3, está sempre correto
+
+- Recall alto para Wine Type 1: 92% - consegue identificar quase todos os vinhos do tipo 1
+
+- Balanceamento razoável: Métricas similares entre as classes
+
+**Pontos de Melhoria**
+
+*Problema com Wine Type 3:*
+
+- Recall de 85% - o modelo falha em identificar 15% dos vinhos do tipo 3
+
+Isso significa que 15% dos vinhos tipo 3 estão sendo classificados erroneamente como outros tipos
+
+*Precisão do Wine Type 1:*
+
+- 80% - quando o modelo diz "é tipo 1", em 20% dos casos está errado
+
 ### Etapa 8 - Treinamento do Modelo KNN
 
 

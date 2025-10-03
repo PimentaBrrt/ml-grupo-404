@@ -27,5 +27,7 @@ plt.title("Matriz de Confusão - Wine")
 # plt.savefig("docs/projeto/images/cm-d-tree.svg", format="svg", transparent=True)
 plt.close()
 
-print("\nRelatório de Classificação:")
-print(classification_report(y_test, y_pred))
+report_dict = classification_report(y_test, y_pred, output_dict=True)
+report_df = pd.DataFrame(report_dict).transpose()
+
+print(report_df.round(2).to_markdown())
