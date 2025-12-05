@@ -1,8 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.svm import SVC
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.model_selection import train_test_split, cross_val_score
 
 le = LabelEncoder()
 scaler = StandardScaler()
@@ -24,8 +23,13 @@ svm_model = SVC(kernel="rbf", C=1, gamma="scale")
 svm_model.fit(X_train_scaled, y_train)
 y_pred = svm_model.predict(X_test_scaled)
 
-acc = accuracy_score(y_test, y_pred)
-print("Acurácia do SVM:", acc)
+train_accuracy = svm_model.score(X_train_scaled, y_train)
+test_accuracy = svm_model.score(X_test_scaled, y_test)
+print(f"\n<b>Acurácias dos conjuntos - SVM RBF</b>\n")
+print(f"Acurácia no Treino: {train_accuracy:.4f} \n")
+print(f"Acurácia no Teste: {test_accuracy:.4f}")
 
-print("\nRelatório de Classificação:\n")
-print(classification_report(y_test, y_pred))
+cv_scores = cross_val_score(svm_model, X, y, cv=5)
+print(f"\n<b>Validação Cruzada (5-fold) -</b>\n")
+print(f"Scores: {cv_scores}\n")
+print(f"Média: {cv_scores.mean():.4f} (+/- {cv_scores.std() * 2:.4f})")

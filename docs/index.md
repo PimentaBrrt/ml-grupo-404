@@ -14,7 +14,7 @@ Projetos de machine learning realizados em *2025.2*, orientados e supervisionado
 ## Entregas
 
 - [x] Projeto 1 - Data 30/09/2025
-- [ ] Projeto 2 - Data 05/12/2025
+- [x] Projeto 2 - Data 05/12/2025
 
 ## Referências
 

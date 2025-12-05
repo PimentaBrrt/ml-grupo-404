@@ -489,4 +489,64 @@ O modelo atingiu uma performance excepcional, com acurácia geral de **97%**, cl
 
 ### Etapa 9 - Treinamento do Modelo SVM
 
-Agora, vamos treinar um modelo SVM para prever a variável alvo `Wine_Type` para os dados do conjunto teste. Nosso objetivo aqui é treinar e avaliar o modelo, para depois compará-lo ao Random Forest e o KNN (feito no projeto anterior) e decidir o melhor para esta base.
+Agora, vamos treinar um modelo SVM para prever a variável alvo `Wine_Type` para os dados do conjunto teste. Nosso objetivo aqui é treinar e avaliar o modelo, para depois compará-lo ao Random Forest e o KNN (feito no projeto anterior) e decidir o melhor para esta base. Para esse primeiro modelo SVM, vamos utilizar o *kernel* **RBF (Radial Basis Function)**. Esse *kernel* mapeia os dados em um *espaço dimensional infinito* por meio de uma função gaussiana. Esse *kernel* foi projetado para grandes volumes de dados, então, caso haja algum problema, também podemos testar um **SVM linear**.
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto2/svm/training.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto2/svm/training.py"
+    ```
+
+### Etapa 10 - Avaliação do Modelo SVM
+
+Agora, vamos realizar a avaliação do modelo de SVM com RBF.
+
+#### Acurácia
+
+O modelo atingiu a acurácia de **100%**. É um valor de acurácia perfeito, porém, devemos realizar uma validação cruzada novamente para garantir que não é *overfitting*.
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto2/svm/cross-val-rbf.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto2/svm/cross-val-rbf.py"
+    ```
+
+Como é possível observar pela acurácia dos folds, o modelo sofre de *overfitting* pesado, já que a média de acurácia ficou de **69,71%**. Uma possível causa para esse problema é o fato de que, anteriormente, foi criada a coluna `Wine_Type` através de um K-Means realizado em toda a base de dados, potencialmente vazando dados e causando a memorização do treino pelo modelo ao invés da aprendizagem e generalização real. Portanto, agora, vamos realizar direto uma validação cruzada mas utilizando o *kernel* **Linear** para o **SVM**.
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto2/svm/cross-val-linear.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto2/svm/cross-val-linear.py"
+    ```
+
+O SVM com **kernel RBF** apresentou *overfitting severo* em validação cruzada **(≈69,7%)**, enquanto a versão com **kernel linear** alcançou *desempenho robusto* **(≈96,6%)**, evidenciando que, para bases pequenas e aproximadamente lineares, a escolha do kernel é determinante para a capacidade de generalização do modelo.
+
+#### Matriz de Confusão
+
+Considerando que a acurácia do modelo foi de **100%**, não é sequer necessário obsevar a matriz de confusão. O modelo acertou em todos os casos. Todas as métricas foram perfeitas e, dessa vez, através do *kernel linear*, sem *overfitting*.
+
+### Etapa 11 - Conclusão Final
+
+Os resultados evidenciam que, em bases pequenas, modelos *excessivamente flexíveis* tendem a memorizar os dados, enquanto abordagens *mais restritivas*, como *SVM Linear*, *KNN* e *Random Forest*, apresentam melhor equilíbrio entre viés e variância.
+
+Em termos de desempenho, considerando a *média da acurácia obtida por validação cruzada*, o *SVM Linear* apresentou **96,65%**, enquanto o *Random Forest* atingiu a maior média, com **98,86%**. O modelo *KNN*, por sua vez, apresentou desempenho satisfatório, com média de **95,52%**.
+
+Diante desses resultados, conclui-se que o modelo **Random Forest** é o mais adequado para a previsão do tipo de vinho nesta base, por apresentar o melhor desempenho médio aliado a maior robustez e estabilidade na generalização.

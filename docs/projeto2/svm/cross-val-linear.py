@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split, cross_val_score
 
 le = LabelEncoder()
@@ -18,21 +18,18 @@ X_train, X_test, y_train, y_test = train_test_split(
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-rf = RandomForestClassifier(n_estimators=100,
-                            max_depth=5,
-                            max_features='sqrt', 
-                            random_state=42)
+svm_model = SVC(kernel="linear", C=1, gamma="scale")
 
-rf.fit(X_train_scaled, y_train)
-predictions = rf.predict(X_test_scaled)
+svm_model.fit(X_train_scaled, y_train)
+y_pred = svm_model.predict(X_test_scaled)
 
-train_accuracy = rf.score(X_train_scaled, y_train)
-test_accuracy = rf.score(X_test_scaled, y_test)
-print(f"\n<b>Acurácias dos conjuntos - Random Forest</b>\n")
+train_accuracy = svm_model.score(X_train_scaled, y_train)
+test_accuracy = svm_model.score(X_test_scaled, y_test)
+print(f"\n<b>Acurácias dos conjuntos - SVM linear</b>\n")
 print(f"Acurácia no Treino: {train_accuracy:.4f} \n")
 print(f"Acurácia no Teste: {test_accuracy:.4f}")
 
-cv_scores = cross_val_score(rf, X, y, cv=5)
+cv_scores = cross_val_score(svm_model, X, y, cv=5)
 print(f"\n<b>Validação Cruzada (5-fold) -</b>\n")
 print(f"Scores: {cv_scores}\n")
 print(f"Média: {cv_scores.mean():.4f} (+/- {cv_scores.std() * 2:.4f})")
