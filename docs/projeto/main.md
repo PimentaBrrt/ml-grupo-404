@@ -1,7 +1,7 @@
 # Modelo de Machine Learning - Árvore de Decisões, KNN e K-Means
 
 Para esse projeto, foi utilizado um dataset obtido no [**Kaggle**](https://kaggle.com){:target='_blank'}.
-Os dados usados podem ser baixados [**aqui**](https://www.kaggle.com/datasets/harrywang/wine-dataset-for-clustering){:target='_blank'}, e foram adaptados de outra base de vinhos, 
+Os dados usados podem ser baixados [**aqui**](https://www.kaggle.com/datasets/harrywang/wine-dataset-for-clustering){:target='_blank'}, e foram adaptados de outra base de vinhos.
 
 ## Objetivo
 
