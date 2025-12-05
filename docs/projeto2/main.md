@@ -295,7 +295,7 @@ Antes de treinar o modelo, é necessário descobrir o número de clusters que se
 
 === "Elbow"
 
-    ![Elbow Method](../images/elbow.svg)
+    ![Elbow Method](../projeto/images/elbow.svg)
 
 === "Código"
 
@@ -312,7 +312,7 @@ Para a formação dos clusters do K-Means, foi utilizado a técnica do PCA (Prin
 === "K-Means PCA"
 
     <figure markdown="span">
-        ![K-Means](../images/k-means.svg)
+        ![K-Means](../projeto/images/k-means.svg)
         <figcaption>Silhouette Score: 0.2849</figcaption>
     </figure>
 
@@ -341,7 +341,7 @@ O **silhouette score** ficou baixo, por isso, vamos tentar outra técnica que n�
 === "K-Means t-SNE"
 
     <figure markdown="span">
-        ![K-Means](../images/k-means-tsne.svg)
+        ![K-Means](../projeto/images/k-means-tsne.svg)
         <figcaption>Silhouette Score: 0.5928</figcaption>
     </figure>
 
@@ -407,3 +407,86 @@ Esta divisão adequada é de extrema importância, pois ajuda a evitar *overfitt
 
 ### Etapa 6 - Regressão Linear Múltipla do Modelo
 
+Nessa regressão linear múltipla, vamos prever a variável quantitativa contínua `Alcohol`, que é o teor alcoólico do vinho.
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto2/rlm/training.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto2/rlm/training.py"
+    ```
+
+O R² do modelo foi de **0,7847**, indicando que aproximadamente **78,47%** da variabilidade do teor alcoólico(`Alcohol`) é explicada pelas variáveis independentes do modelo. Isso sugere um bom poder explicativo, embora ainda exista uma parcela da variabilidade que não é capturada.
+
+- Variáveis mais relevantes para a predição: `Wine_Type`, `Color_Intensity` e `Flavanoids`.
+
+- Variáveis menos relevantes para a predição: `Ash`, `Nonflavanoid_Phenols` e `Proanthocyanins`.
+
+### Etapa 7 - Treinamento do Modelo Random Forest
+
+Agora, vamos treinar um modelo de Random Forest para prever a variável alvo `Wine_Type` para os dados do conjunto teste. Nosso objetivo aqui é treinar e avaliar o modelo, para depois compará-lo ao SVM e o KNN (feito no projeto anterior) e decidir o melhor para esta base.
+
+=== "Saída"
+
+    ``` python exec="1" html="1"
+    --8<-- "docs/projeto2/random-forest/training.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto2/random-forest/training.py"
+    ```
+
+### Etapa 8 - Avaliação do Modelo Random Forest
+
+Agora, vamos realizar a avaliação do modelo de Random Forest.
+
+#### Acurácia
+
+Coincidentemente, o modelo atingiu a mesma acurácia do modelo KNN realizado anteriormente, de **97,22%**. É um ótimo de valor de acurácia, porém, devemos realizar uma validação cruzada novamente para garantir que não é *overfitting*.
+
+#### Acurácias dos conjuntos e validação cruzada
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto2/random-forest/cross-val.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto2/random-forest/cross-val.py"
+    ```
+
+Com esses resultados, assim como aconteceu no KNN, podemos concluir que há muita chance desse *não ser um caso de overfitting*. Isso porque as acurácias dos conjuntos são **consistentes**. Além disso, a validação cruzada nos demonstrou uma alta média, de 98,86%, um desvio padrão baixo e uma variação dos scores entre 94,28% à 100%, uma variação normal. Considerando a natureza do dataset, que é pequeno, bem separado e pouco ruidoso, o resultado é coerente, e nenhum "milagre".
+
+#### Matriz de Confusão
+
+=== "Matriz de Confusão"
+
+    ![CM-RF](images/cm-rf.svg)
+
+    #### Métricas de qualidade
+
+    ``` python exec="1"
+    --8<-- "docs/projeto2/random-forest/cm.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto2/random-forest/cm.py"
+    ```
+
+O modelo atingiu uma performance excepcional, com acurácia geral de **97%**, classe 2 perfeitamente prevista pelo modelo com Precisão, Recall e F1-Score de 1.00 e alta consistência geral, já que todas classes possuem F1-Score acima de 0.94.
+
+### Etapa 9 - Treinamento do Modelo SVM
+
+Agora, vamos treinar um modelo SVM para prever a variável alvo `Wine_Type` para os dados do conjunto teste. Nosso objetivo aqui é treinar e avaliar o modelo, para depois compará-lo ao Random Forest e o KNN (feito no projeto anterior) e decidir o melhor para esta base.

@@ -294,7 +294,7 @@ Antes de treinar o modelo, é necessário descobrir o número de clusters que se
 
 === "Elbow"
 
-    ![Elbow Method](../images/elbow.svg)
+    ![Elbow Method](images/elbow.svg)
 
 === "Código"
 
@@ -311,7 +311,7 @@ Para a formação dos clusters do K-Means, foi utilizado a técnica do PCA (Prin
 === "K-Means PCA"
 
     <figure markdown="span">
-        ![K-Means](../images/k-means.svg)
+        ![K-Means](images/k-means.svg)
         <figcaption>Silhouette Score: 0.2849</figcaption>
     </figure>
 
@@ -340,7 +340,7 @@ O **silhouette score** ficou baixo, por isso, vamos tentar outra técnica que n�
 === "K-Means t-SNE"
 
     <figure markdown="span">
-        ![K-Means](../images/k-means-tsne.svg)
+        ![K-Means](images/k-means-tsne.svg)
         <figcaption>Silhouette Score: 0.5928</figcaption>
     </figure>
 
@@ -411,7 +411,7 @@ Agora, vamos treinar um modelo de árvore de decisões (Decision Tree) para prev
 === "Decision Tree"
     
     <figure markdown="span">
-        ![Decision-Tree](../images/d-tree.svg)
+        ![Decision-Tree](images/d-tree.svg)
     </figure>
 
 === "Código"
@@ -456,7 +456,7 @@ Agora, vamos visualizar a matriz de confusão do modelo.
 
     Matriz de confusão
 
-    ![CM-Decision-Tree](../images/cm-d-tree.svg)
+    ![CM-Decision-Tree](images/cm-d-tree.svg)
 
     Métricas de qualidade
 
@@ -501,7 +501,7 @@ Agora, vamos treinar um modelo de KNN para prever a variável alvo `Wine_Type` p
 === "KNN"
     
     <figure markdown="span">
-        ![KNN](../images/knn.svg)
+        ![KNN](images/knn.svg)
         <figcaption>Acurácia: 0.9722 </figcaption>
     </figure>
 
@@ -533,17 +533,15 @@ O modelo alcançou uma acurácia de **97,22%**, que é excelente, contudo indica
     --8<-- "docs/projeto/knn/test-over.py"
     ```
 
-Com esses resultados, podemos concluir que há muita chance desse *não ser um caso de overfitting*. Isso porque as acurácias dos conjuntos são **consistentes**, variando apenas em 0,04%. Além disso, a validação cruzada nos demonstrou uma alta média, de 95,52%, um desvio padrão baixo (aproximadamente 3,78%) e uma variação dos scores entre 88,9% à 100%, uma variação normal.
+Com esses resultados, podemos concluir que há muita chance desse *não ser um caso de overfitting*. Isso porque as acurácias dos conjuntos são **consistentes**. Além disso, a validação cruzada nos demonstrou uma alta média, de 95,52%, um desvio padrão baixo e uma variação dos scores entre 88,9% à 100%, uma variação normal.
 
 #### Matriz de Confusão
 
 === "Matriz de Confusão"
 
-    Matriz de confusão
+    ![CM-KNN](images/cm-knn.svg)
 
-    ![CM-KNN](../images/cm-knn.svg)
-
-    Métricas de qualidade
+    #### Métricas de qualidade
 
     ``` python exec="1"
     --8<-- "docs/projeto/knn/cm.py"
