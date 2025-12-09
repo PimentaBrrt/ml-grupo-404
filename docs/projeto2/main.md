@@ -1,4 +1,4 @@
-# Modelo de Machine Learning - K-means, Regressão Linear Múltipla, Random Forest e SVM
+# Modelo de Machine Learning - K-means, Random Forest e SVM
 
 Para esse projeto, foi utilizado um dataset obtido no [**Kaggle**](https://kaggle.com){:target='_blank'}.
 Os dados usados podem ser baixados [**aqui**](https://www.kaggle.com/datasets/harrywang/wine-dataset-for-clustering){:target='_blank'}, e foram adaptados de outra base de vinhos.
@@ -405,29 +405,7 @@ Para realizar a divisão, foi utilizada a função *train_test_split()* do `scik
 
 Esta divisão adequada é de extrema importância, pois ajuda a evitar *overfitting*.
 
-### Etapa 6 - Regressão Linear Múltipla do Modelo
-
-Nessa regressão linear múltipla, vamos prever a variável quantitativa contínua `Alcohol`, que é o teor alcoólico do vinho.
-
-=== "Saída"
-
-    ``` python exec="1"
-    --8<-- "docs/projeto2/rlm/training.py"
-    ```
-
-=== "Código"
-
-    ``` python exec="0"
-    --8<-- "docs/projeto2/rlm/training.py"
-    ```
-
-O R² do modelo foi de **0,7847**, indicando que aproximadamente **78,47%** da variabilidade do teor alcoólico(`Alcohol`) é explicada pelas variáveis independentes do modelo. Isso sugere um bom poder explicativo, embora ainda exista uma parcela da variabilidade que não é capturada.
-
-- Variáveis mais relevantes para a predição: `Wine_Type`, `Color_Intensity` e `Flavanoids`.
-
-- Variáveis menos relevantes para a predição: `Ash`, `Nonflavanoid_Phenols` e `Proanthocyanins`.
-
-### Etapa 7 - Treinamento do Modelo Random Forest
+### Etapa 6 - Treinamento do Modelo Random Forest
 
 Agora, vamos treinar um modelo de Random Forest para prever a variável alvo `Wine_Type` para os dados do conjunto teste. Nosso objetivo aqui é treinar e avaliar o modelo, para depois compará-lo ao SVM e o KNN (feito no projeto anterior) e decidir o melhor para esta base.
 
@@ -443,7 +421,7 @@ Agora, vamos treinar um modelo de Random Forest para prever a variável alvo `Wi
     --8<-- "docs/projeto2/random-forest/training.py"
     ```
 
-### Etapa 8 - Avaliação do Modelo Random Forest
+### Etapa 7 - Avaliação do Modelo Random Forest
 
 Agora, vamos realizar a avaliação do modelo de Random Forest.
 
@@ -487,7 +465,7 @@ Com esses resultados, assim como aconteceu no KNN, podemos concluir que há muit
 
 O modelo atingiu uma performance excepcional, com acurácia geral de **97%**, classe 2 perfeitamente prevista pelo modelo com Precisão, Recall e F1-Score de 1.00 e alta consistência geral, já que todas classes possuem F1-Score acima de 0.94.
 
-### Etapa 9 - Treinamento do Modelo SVM
+### Etapa 8 - Treinamento do Modelo SVM
 
 Agora, vamos treinar um modelo SVM para prever a variável alvo `Wine_Type` para os dados do conjunto teste. Nosso objetivo aqui é treinar e avaliar o modelo, para depois compará-lo ao Random Forest e o KNN (feito no projeto anterior) e decidir o melhor para esta base. Para esse primeiro modelo SVM, vamos utilizar o *kernel* **RBF (Radial Basis Function)**. Esse *kernel* mapeia os dados em um *espaço dimensional infinito* por meio de uma função gaussiana. Esse *kernel* foi projetado para grandes volumes de dados, então, caso haja algum problema, também podemos testar um **SVM linear**.
 
@@ -503,7 +481,7 @@ Agora, vamos treinar um modelo SVM para prever a variável alvo `Wine_Type` para
     --8<-- "docs/projeto2/svm/training.py"
     ```
 
-### Etapa 10 - Avaliação do Modelo SVM
+### Etapa 9 - Avaliação do Modelo SVM
 
 Agora, vamos realizar a avaliação do modelo de SVM com RBF.
 
@@ -543,7 +521,7 @@ O SVM com **kernel RBF** apresentou *overfitting severo* em validação cruzada 
 
 Considerando que a acurácia do modelo foi de **100%**, não é sequer necessário obsevar a matriz de confusão. O modelo acertou em todos os casos. Todas as métricas foram perfeitas e, dessa vez, através do *kernel linear*, sem *overfitting*.
 
-### Etapa 11 - Conclusão Final
+### Etapa 10 - Conclusão Final
 
 Os resultados evidenciam que, em bases pequenas, modelos *excessivamente flexíveis* tendem a memorizar os dados, enquanto abordagens *mais restritivas*, como *SVM Linear*, *KNN* e *Random Forest*, apresentam melhor equilíbrio entre viés e variância.
 

@@ -272,7 +272,7 @@ Não há colunas desimportantes para a análise no dataset. Um exemplo de coluna
 #### 3° Passo: Padronização das features numéricas
 
 Por fim, é necessário padronizar as features numéricas da base. Ao invés da normalização, será utilizada a técnica de padronização devido aos outliers nas features numéricas.
-Para a padronização, foi utilkizado o *StandardScaler()* do `scikit-learn`.
+Para a padronização, foi utilizado o *StandardScaler()* do `scikit-learn`.
 
 ``` python exec="0"
 
