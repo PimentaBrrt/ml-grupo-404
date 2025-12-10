@@ -135,6 +135,5 @@ nav:
   - Home: index.md
   - Projetos:
     - Projeto 1: ./projeto/main.md
+    - Projeto 2 (Integrado): ./projeto3/main.md
     - Projeto Extra: ./projeto2/main.md
-    - Projeto Integrado: ./projeto3/main.md
-    

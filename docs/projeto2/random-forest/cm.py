@@ -37,7 +37,7 @@ plt.xlabel("Predito")
 plt.ylabel("Real")
 plt.title("Matriz de Confusão - Random Forest")
 
-plt.savefig("docs/projeto2/images/cm-rf.svg", format="svg", transparent=True)
+# plt.savefig("docs/projeto2/images/cm-rf.svg", format="svg", transparent=True)
 plt.close()
 
 report_dict = classification_report(y_test, predictions, output_dict=True)
