@@ -1,7 +1,8 @@
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.metrics import r2_score, root_mean_squared_error
 
 encoder = OneHotEncoder()
 scaler = StandardScaler()
@@ -30,6 +31,32 @@ y = df["recomendacoes"]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-print(f"Treino: {X_train.shape[0]} amostras\n")
-print(f"Teste: {X_test.shape[0]} amostras\n")
-print(f"Proporção: {X_train.shape[0]/X.shape[0]*100:.1f}% treino, {X_test.shape[0]/X.shape[0]*100:.1f}% teste\n")
+melhor_k = None
+melhor_r2 = -999
+resultados = []
+
+for k in [3, 5, 7, 9, 11, 13, 15]:
+    knn = KNeighborsRegressor(n_neighbors=k, weights="distance", p=2)
+    knn.fit(X_train, y_train)
+
+    y_pred = knn.predict(X_test)
+    r2 = r2_score(y_test, y_pred)
+
+    resultados.append((k, r2))
+
+    print(f"K = {k} -> R² = {r2:.4f}")
+
+    if r2 > melhor_r2:
+        melhor_r2 = r2
+        melhor_k = k
+
+print("\nMelhor K encontrado:", melhor_k)
+print("Melhor R² obtido:", melhor_r2)
+
+knn_final = KNeighborsRegressor(n_neighbors=melhor_k, weights="distance", p=2)
+knn_final.fit(X_train, y_train)
+y_pred_final = knn_final.predict(X_test)
+
+print("\n--- Resultados do modelo final ---")
+print("R²:", r2_score(y_test, y_pred_final))
+print("RMSE:", root_mean_squared_error(y_test, y_pred_final))

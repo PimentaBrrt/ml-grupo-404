@@ -202,9 +202,9 @@ Para a padronização, foi utilizado o *StandardScaler()* do `scikit-learn`.
 from sklearn.preprocessing import StandardScaler
 
 scaler = StandardScaler()
-features_num = ["preco", "estrelas_media", "avaliacoes", "recomendacoes"]
+features_num = ["preco", "estrelas_media", "avaliacoes"]
 
-df_scaled = scaler.fit_transform(df[features_num])
+df_scaled = pd.DataFrame(scaler.fit_transform(df[features_num]), columns=features_num, index=df.index)
 
 ```
 
@@ -218,10 +218,16 @@ Utilizaremos a técnica de One-Hot Encoding para codificar essas variáveis, uti
 from sklearn.preprocessing import OneHotEncoder
 
 encoder = OneHotEncoder()
-categorical_cols = ["formato", "aminoacidos", "carboidratos", "clinical", "proteinas", "termogenicos", "veganos", "vegetarianos", "vitaminas"]
 
-df_encoded = encoder.fit_transform(df[categorical_cols])
+df_encoded = encoder.fit_transform(df[["formato"]]).toarray()
+df_encoded = pd.DataFrame(df_encoded, columns=encoder.get_feature_names_out(["formato"]), index=df.index)
 
+```
+
+#### Código Final do Pré-processamento
+
+``` python exec="0"
+--8<-- "docs/projeto3/preprocessing.py"
 ```
 
 ### Etapa 3 - Divisão de dados
@@ -238,8 +244,6 @@ Para realizar a divisão, foi utilizada a função *train_test_split()* do `scik
 
 - **random_state=42:** Parâmetro que controla o gerador de número aleatórios utilizado para sortear os dados antes de separá-los. Garante reprodutibilidade.
 
-- **stratify=y:** Esse atributo definido como *y* é essencial devido à natureza da coluna `Wine_Type`. Com essa definição, será mantida a mesma proporção das categorias em ambos os conjuntos, reduzindo o viés.
-
 === "Saída"
 
     ```python exec="1"
@@ -254,20 +258,208 @@ Para realizar a divisão, foi utilizada a função *train_test_split()* do `scik
 
 Esta divisão adequada é de extrema importância, pois ajuda a evitar *overfitting*.
 
-### Etapa 6 - Treinamento do Modelo Random Forest
+### Etapa 4 - Regressão Linear Múltipla
 
+Agora, vamos fazer um modelo de *Regressão Linear Múltipla* com a base.
 
+#### Multicolinearidade
 
-### Etapa 7 - Avaliação do Modelo Random Forest
+Primeiramente, vamos checar por **Multicolinearidade** no modelo para garantir que as variáveis independentes não tenham seus coeficientes inflados por correlações entre si:
 
+``` python exec="1"
+--8<-- "docs/projeto3/rlm/mcl.py"
+```
 
+Como todos valores estão abaixo de **5**, inclusive, *muito próximos do ideal de 1*, não há multicolinearidade no modelo, então não precisamos retirar variáveis.
 
-### Etapa 8 - Treinamento do Modelo SVM
+#### Stepwise 
 
+Iremos realizar o **Método de Seleção de Variáveis** para deixar no modelo apenas as variáveis relevantes para a predição (e que não tenham correlação espúria).
 
+=== "Saída"
 
-### Etapa 9 - Avaliação do Modelo SVM
+    ``` python exec="1"
+    --8<-- "docs/projeto3/rlm/step.py"
+    ```
 
+=== "Código"
 
+    ``` python exec="0"
+    --8<-- "docs/projeto3/rlm/step.py"
+    ```
 
-### Etapa 10 - Conclusão Final
+#### Modelo Final
+
+Agora, finalmente, vamos rodar o modelo final, checar os coeficientes e o *R²*:
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto3/rlm/training.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto3/rlm/training.py"
+    ```
+
+O *R²* do modelo foi ótimo, de **92%**, significando que a regressão linear realizada possui uma forte capacidade de explicação da variação da variável `recomendacoes` através das variáveis selecionadas no stepwise. 
+
+#### Validação Cruzada
+
+Contanto, devido ao alto valor de *R²*, surge uma suspeita de *overfitting* no modelo. Vamos fazer uma validação cruzada para validar essa hipótese:
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto3/rlm/cross-val.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto3/rlm/cross-val.py"
+    ```
+
+A variação do *R²* entre o conjunto de treino e de teste foi de apenas **1,63%**, indicando que não há *overfitting*. Contanto, podemos observar que um dos folds obteve *R²* de **63,88%**, enquanto o resto variou entre bons valores, de **84%** à **91%**. Isso pode indicar que há instabilidade nos dados da base, com uma quantidade considerável de ruído e dataset com poucos registros.
+
+### Etapa 5 - Treinamento do Modelo Random Forest
+
+Agora, vamos realizar o treinamento do modelo Random Forest.
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto3/rf/training.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto3/rf/training.py"
+    ```
+
+### Etapa 6 - Avaliação do Modelo Random Forest
+
+Obtivemos um bom *R²*, de **91,39%**, o que significa que o modelo de *Random Forest* consegue explicar **91,39%** da variação de `recomendacoes`. Além disso, o *RMSE* foi de **1.27**, um bom valor para uma variável que varia de 0 a 100. Ele significa que, em média, a predição erra em 1.27 pontos percentuais de recomendações.
+
+Pudemos observar que, por uma imensa margem, a variável mais importante do modelo é `estrelas_media`. O restante possui pouco poder explicativo, mas devem ser mantidas para fazer ajuste fino dos valores preditos.
+
+#### Validação Cruzada
+
+Antes de seguirmos, vamos fazer uma rápida validação cruzada para garantir que não há *overfitting*.
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto3/rf/cross-val.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto3/rf/cross-val.py"
+    ```
+
+Podemos observar que sim, o modelo sofre de *overfitting*. A *R²* no treino é de **97,78%**, porém, no teste, cai significativamente, para **89,07%**. Além disso, a média de *R²* dos folds foi de **79,08%**, chegando a ter um fold com apenas **61,65%** de *R²*. 
+
+Mesmo após alguns testes, não consegui reduzir o *overfitting*. Por isso, podemos concluir que o Random Forest não é o melhor modelo para esse problema. Provavelmente, isso acontece devido à combinação dos seguintes fatores:
+
+- **Dataset pequeno:** Random Forest costuma precisar de muitos dados para não oscilar entre folds;
+
+- **Target com variação baixa:** O modelo se confude ao tentar fazer splits certeiros;
+
+- **Ruído no dataset:** Árvores podem amplificar possível ruído na base.
+
+### Etapa 7 - Treinamento do Modelo SVM
+
+Considerando que a base é pequena, e relembrando do aprendizado do *Projeto Extra*, vamos diretamente utilizar o *kernel linear* para fazer o modelo.
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto3/svm/training.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto3/svm/training.py"
+    ```
+
+### Etapa 8 - Avaliação do Modelo SVM
+
+Obtivemos um ótimo *R²*, de **92,16%**, o que significa que o modelo de *SVM* consegue explicar **92,16%** da variação de `recomendacoes`. Além disso, o *RMSE* foi de **1.21**, um bom valor para uma variável que varia de 0 a 100. Ele significa que, em média, a predição erra em 1.21 pontos percentuais de recomendações.
+
+#### Validação cruzada
+
+Vamos testar novamente *overfitting* no modelo:
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto3/svm/cross-val.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto3/svm/cross-val.py"
+    ```
+
+Dessa vez, parece que não há *overfitting* no modelo, já que obtivemos *R²* de **90,34%** no conjunto treino e **92,16%** no conjunto teste. Novamente, o mesmo sinal de instabilidade na base observado na *Regressão Linear Múltipla* aparece aqui, com variação alta entre os folds mesmo sem o modelo sofrer de *overfitting*.
+
+### Etapa 9 - Treinamento do Modelo KNN
+
+Agora, vamos fazer o treinamento do modelo *KNN*.
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto3/knn/training.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto3/knn/training.py"
+    ```
+
+### Etapa 10 - Avaliação do Modelo KNN
+
+Obtivemos um bom *R²*, de **91,28%**, o que significa que o modelo de *KNN* consegue explicar **91,28%** da variação de `recomendacoes`. Além disso, o *RMSE* foi de **1.28**, um bom valor para uma variável que varia de 0 a 100. Ele significa que, em média, a predição erra em 1.28 pontos percentuais de recomendações.
+
+#### Validação cruzada
+
+Agora, vamos para o momento crítico novamente. Apesar do *SVM* não ter tido *overfitting*, podemos ver se o *KNN* não sofre com o ruído presente na base.
+
+=== "Saída"
+
+    ``` python exec="1"
+    --8<-- "docs/projeto3/knn/cross-val.py"
+    ```
+
+=== "Código"
+
+    ``` python exec="0"
+    --8<-- "docs/projeto3/knn/cross-val.py"
+    ```
+
+Novamente, houve *overfitting* no modelo, com uma variação de *R²* entre o conjunto treino e teste de **aproximadamente 8,5%**. Além disso, os folds ainda possuem uma enorme variação no valor de *R²*, indicando que a instabilidade dos dados também afeta o *KNN*.
+
+### Etapa 11 - Conclusão Final
+
+O objetivo deste projeto foi prever o percentual de recomendações dos produtos da Growth a partir de variáveis numéricas, categóricas e binárias obtidas por raspagem. Trata-se de um **dataset pequeno**, com algumas variáveis com *outliers* e certo nível de ruído, o que impactou diretamente o desempenho e estabilidade de alguns modelos.
+
+Após o pré-processamento, incluindo padronização, codificação categórica e remoção de registros inconsistentes, quatro abordagens principais foram testadas: **Regressão Linear Múltipla**, **Random Forest**, **KNN** e **SVM (kernel linear)**.
+
+- **Random Forest:** apresentou bom desempenho inicial, mas sofreu com *overfitting* severo e grande oscilação entre folds. Com poucos dados e um alvo de baixa variabilidade, as árvores não conseguiram generalizar bem.
+
+- **KNN:** apesar de ter obtido resultados sólidos, mostrou instabilidade na validação cruzada e maior sensibilidade ao ruído. Comportamento esperado para métodos baseados em vizinhança.
+
+- **Regressão Linear Múltipla:** apresentou bom desempenho geral, com alto *R²* de **92%** e sem evidência de *overfitting*. Contudo, sofre com a instabilidade dos dados da base, como é possível observar pela variação do *R²* entre os folds.
+
+- **SVM Linear:** entregou o melhor equilíbrio geral. Apresentou alto *R²* de **92,16%** (0,16% maior do que da regressão), baixo RMSE, ótima generalização e quase nenhuma evidência de *overfitting*, sendo robusto mesmo com poucas observações. Apesar disso, também sofre com a instabilidade dos dados da base, mesmo que bem menos do que os outros modelos.
+
+Portanto, **o modelo escolhido como solução final foi o SVM Linear**, pois forneceu o melhor desempenho consistente, maior estabilidade e se mostrou o método mais adequado para a estrutura e tamanho reduzido do dataset. Apesar disso, a **Regressão Linear Múltipla** possui desempenho quase idêntico, então, também pode ser utilizada nesse caso.

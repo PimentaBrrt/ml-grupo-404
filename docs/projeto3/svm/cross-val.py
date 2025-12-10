@@ -1,6 +1,8 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.svm import SVR
 
 encoder = OneHotEncoder()
 scaler = StandardScaler()
@@ -27,5 +29,23 @@ df_encoded = pd.DataFrame(df_encoded, columns=encoder.get_feature_names_out(["fo
 X = pd.concat([df_scaled, df_encoded], axis=1)
 y = df["recomendacoes"]
 
-print(X.shape)
-print(X.head())
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+svm = SVR(
+    kernel="linear",
+    C=10,
+    epsilon=1.1
+)
+
+svm.fit(X_train, y_train)
+
+train_accuracy = svm.score(X_train, y_train)
+test_accuracy = svm.score(X_test, y_test)
+print(f"\n<b>R² dos conjuntos - SVM</b>\n")
+print(f"R² no Treino: {train_accuracy:.4f} \n")
+print(f"R² no Teste: {test_accuracy:.4f}")
+
+cv_scores = cross_val_score(svm, X, y, cv=5)
+print(f"\n<b>Validação Cruzada (5-fold) -</b>\n")
+print(f"Scores: {cv_scores}\n")
+print(f"Média: {cv_scores.mean():.4f} (+/- {cv_scores.std() * 2:.4f})")

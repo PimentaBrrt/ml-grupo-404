@@ -1,6 +1,9 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import root_mean_squared_error, r2_score
 
 encoder = OneHotEncoder()
 scaler = StandardScaler()
@@ -27,5 +30,23 @@ df_encoded = pd.DataFrame(df_encoded, columns=encoder.get_feature_names_out(["fo
 X = pd.concat([df_scaled, df_encoded], axis=1)
 y = df["recomendacoes"]
 
-print(X.shape)
-print(X.head())
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+rf = RandomForestRegressor(n_estimators=300,
+                            max_depth=None,
+                            max_features="log2",
+                            random_state=42)
+
+rf.fit(X_train, y_train)
+predictions = rf.predict(X_test)
+
+print("R²:", r2_score(y_test, predictions))
+print("RMSE:", root_mean_squared_error(y_test, predictions))
+
+feature_importance = pd.DataFrame({
+    "Feature": X_train.columns,
+    "Importância": rf.feature_importances_
+})
+
+print("<br>Importância das Features:")
+print(feature_importance.sort_values(by="Importância", ascending=False).to_html() + "<br>")

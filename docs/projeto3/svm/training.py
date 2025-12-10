@@ -1,6 +1,9 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVR
+from sklearn.metrics import root_mean_squared_error, r2_score
 
 encoder = OneHotEncoder()
 scaler = StandardScaler()
@@ -27,5 +30,16 @@ df_encoded = pd.DataFrame(df_encoded, columns=encoder.get_feature_names_out(["fo
 X = pd.concat([df_scaled, df_encoded], axis=1)
 y = df["recomendacoes"]
 
-print(X.shape)
-print(X.head())
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+svm = SVR(
+    kernel="linear",
+    C=10,
+    epsilon=1.1
+)
+
+svm.fit(X_train, y_train)
+pred = svm.predict(X_test)
+
+print("R²:", r2_score(y_test, pred))
+print("RMSE:", root_mean_squared_error(y_test, pred))
